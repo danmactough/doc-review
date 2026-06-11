@@ -61,5 +61,5 @@ doc-review [path/to/file.md]
 
 ## Prior Art
 
-Based on (https://github.com/danmactough/slop-review) by Dan Bachelder, which is a port of pi-diff-review (https://github.com/badlogic/pi-diff-review) by Mario Zechner.
+Based on (https://github.com/dbachelder/slop-review) by Dan Bachelder, which is a port of pi-diff-review (https://github.com/badlogic/pi-diff-review) by Mario Zechner.
 
