@@ -1,0 +1,66 @@
+{
+  "name": "pi-doc-review",
+  "version": "0.1.0",
+  "description": "Native Markdown document review window for AI coding agents (pi, Claude Code, Codex CLI). Opens a Glimpse window that renders Markdown, lets the user leave selection and document comments, edit the raw Markdown, and returns feedback to the agent.",
+  "license": "MIT",
+  "author": "Dan MacTough <danmactough@users.noreply.github.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danmactough/doc-review.git",
+    "directory": "plugin"
+  },
+  "homepage": "https://github.com/danmactough/doc-review#readme",
+  "bugs": {
+    "url": "https://github.com/danmactough/doc-review/issues"
+  },
+  "type": "module",
+  "bin": {
+    "doc-review": "bin/doc-review.js"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/pi/index.ts"
+    ]
+  },
+  "files": [
+    "bin",
+    "src",
+    "web",
+    "commands",
+    "skills",
+    "extensions",
+    "scripts",
+    ".claude-plugin",
+    ".codex-plugin"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "install-command": "node scripts/install-command.js"
+  },
+  "dependencies": {
+    "glimpseui": "^0.8.1"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "pi-package",
+    "claude-code",
+    "codex",
+    "pi",
+    "pi-coding-agent",
+    "ai",
+    "markdown",
+    "review",
+    "document-review",
+    "glimpse",
+    "slash-command"
+  ]
+}

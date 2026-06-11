@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0d1117]">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>doc review</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --color-review-bg: #0d1117;
+    --color-review-panel: #161b22;
+    --color-review-border: #30363d;
+    --color-review-text: #c9d1d9;
+    --color-review-muted: #8b949e;
+    --color-review-accent: #0d1117;
+    --color-review-accent-bg: #58a6ffbb;
+    --color-ins-bg: #2ea04326;
+    --color-del-bg: #f8514926;
+  }
+</style>
+<style>
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  .scrollbar-thin::-webkit-scrollbar { width: 10px; height: 10px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #30363d; border-radius: 999px; border: 3px solid #161b22; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .doc-content h1, .doc-content h2, .doc-content h3, .doc-content h4, .doc-content h5, .doc-content h6 {
+    color: #e6edf3; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600;
+  }
+  .doc-content h1 { font-size: 1.75em; border-bottom: 1px solid #30363d; padding-bottom: 0.3em; }
+  .doc-content h2 { font-size: 1.4em; border-bottom: 1px solid #30363d; padding-bottom: 0.25em; }
+  .doc-content h3 { font-size: 1.15em; }
+  .doc-content p { margin: 0.75em 0; color: #c9d1d9; line-height: 1.6; }
+  .doc-content ul, .doc-content ol { padding-left: 2em; margin: 0.5em 0; color: #c9d1d9; }
+  .doc-content li { margin: 0.25em 0; }
+  .doc-content code {
+    background: #161b22; border: 1px solid #30363d; border-radius: 4px;
+    padding: 0.15em 0.35em; font-size: 0.88em; color: #f0f6fc;
+  }
+  .doc-content pre {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 16px; overflow-x: auto; margin: 1em 0;
+  }
+  .doc-content pre code { background: none; border: none; padding: 0; }
+  .doc-content blockquote {
+    border-left: 3px solid #30363d; padding-left: 1em; color: #8b949e; margin: 1em 0;
+  }
+  .doc-content table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+  .doc-content th, .doc-content td {
+    border: 1px solid #30363d; padding: 0.5em 0.75em; text-align: left;
+  }
+  .doc-content th { background: #161b22; color: #e6edf3; font-weight: 600; }
+  .doc-content a { color: #58a6ff; text-decoration: underline; }
+  .doc-content img { max-width: 100%; border-radius: 8px; }
+  .doc-content hr { border: none; border-top: 1px solid #30363d; margin: 2em 0; }
+  .doc-content ins {
+    background: #2ea04326; text-decoration: none; border-radius: 2px; padding: 0 1px;
+  }
+  .doc-content del {
+    background: #f8514926; text-decoration: line-through; border-radius: 2px; padding: 0 1px;
+  }
+  .comment-highlight, .comment-highlight-pending { background: var(--color-review-accent-bg); color: var(--color-review-accent); border-radius: 2px; }
+  .changed-block-marker {
+    border-left: 3px solid #d29922; padding-left: 12px; background: rgba(210, 153, 34, 0.08);
+    border-radius: 4px;
+  }
+  .detached-comment { border-left: 3px solid #f85149; }
+</style>
+</head>
+<body>
+<div id="app" class="flex h-full flex-col">
+  <!-- Toolbar -->
+  <div class="flex items-center justify-between border-b border-review-border bg-review-panel px-4 py-2">
+    <div class="flex items-center gap-3">
+      <span id="doc-title" class="text-sm font-medium text-review-text">doc review</span>
+      <span id="doc-path" class="text-xs text-review-muted truncate max-w-[400px]"></span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="overall-comment-button" class="cursor-pointer rounded-md border border-review-border bg-review-panel px-3 py-1.5 text-xs font-medium text-review-text hover:bg-[#21262d]">Document comment</button>
+      <button id="edit-raw-button" class="hidden cursor-pointer rounded-md border border-review-border bg-review-panel px-3 py-1.5 text-xs font-medium text-review-text hover:bg-[#21262d]">Edit raw</button>
+      <button id="show-diff-button" class="hidden cursor-pointer rounded-md border border-review-border bg-review-panel px-3 py-1.5 text-xs font-medium text-review-text hover:bg-[#21262d]">View raw diff</button>
+      <button id="submit-button" class="cursor-pointer rounded-md border border-[rgba(240,246,252,0.1)] bg-[#238636] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#2ea043]">Submit</button>
+      <button id="cancel-button" class="cursor-pointer rounded-md border border-review-border bg-review-panel px-3 py-1.5 text-xs font-medium text-review-text hover:bg-[#21262d]">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div id="main-content" class="flex flex-1 overflow-hidden selection:bg-review-accent-bg selection:text-review-accent">
+    <!-- Document view -->
+    <div id="doc-view" class="flex flex-1 flex-col overflow-hidden">
+      <!-- Overall comments bar -->
+      <div id="overall-comments-bar" class="hidden border-b border-review-border bg-review-panel px-4 py-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-review-text">Document feedback</span>
+          <button id="add-overall-button" class="cursor-pointer rounded-md border border-review-border bg-[#21262d] px-2 py-1 text-xs text-review-text hover:bg-[#30363d]">+ Add note</button>
+        </div>
+        <div id="overall-comments-list" class="mt-2 space-y-2"></div>
+      </div>
+
+      <!-- Rendered content area -->
+      <div id="doc-content" class="doc-content flex-1 overflow-y-auto px-6 py-4 scrollbar-thin">
+        <div id="rendered-content"></div>
+      </div>
+
+      <!-- Selection comment popup -->
+      <div id="selection-popup" class="hidden absolute z-50 rounded-lg border border-review-border bg-review-panel shadow-xl p-3 w-80">
+        <div class="flex flex-col gap-2">
+          <span class="text-xs text-review-muted">Comment on selection</span>
+          <textarea id="selection-comment-input" class="scrollbar-thin w-full resize-none rounded border border-review-border bg-[#010409] px-2 py-1 text-xs text-review-text outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" rows="2" placeholder="Write a comment..."></textarea>
+          <div class="flex items-center gap-2 justify-end">
+            <button id="add-selection-comment-button" class="cursor-pointer rounded-md bg-[#238636] px-2 py-1 text-xs text-white hover:bg-[#2ea043]">Add</button>
+            <button id="cancel-selection-button" class="cursor-pointer rounded-md border border-review-border px-2 py-1 text-xs text-review-text hover:bg-[#21262d]">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monaco editor container (hidden until editing) -->
+      <div id="monaco-editor-container" class="hidden flex-1"></div>
+    </div>
+
+    <!-- Sidebar: comments list -->
+    <div id="comments-sidebar" class="hidden w-72 border-l border-review-border bg-review-panel overflow-y-auto scrollbar-thin">
+      <div class="px-3 py-2 border-b border-review-border">
+        <span class="text-xs font-semibold text-review-text">Comments</span>
+        <span id="comment-count" class="ml-2 text-xs text-review-muted">0</span>
+      </div>
+      <div id="comments-list" class="divide-y divide-review-border"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Raw diff modal -->
+<div id="diff-modal" class="hidden fixed inset-0 bg-[rgba(1,4,9,0.8)] backdrop-blur-sm z-50 flex items-center justify-center">
+  <div class="bg-review-panel border border-review-border rounded-lg w-[800px] max-w-[90vw] max-h-[80vh] flex flex-col">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-review-border">
+      <span class="text-sm font-semibold text-review-text">Raw diff</span>
+      <button id="close-diff-modal" class="cursor-pointer text-review-muted hover:text-review-text text-lg leading-none">&times;</button>
+    </div>
+    <pre id="diff-content" class="flex-1 overflow-auto p-4 text-xs font-mono text-review-text scrollbar-thin"></pre>
+  </div>
+</div>
+
+<span id="doc-review-data" class="hidden">__INLINE_DATA__</span>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+<script>__INLINE_JS__</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "doc-review",
+  "description": "Single-plugin marketplace exposing doc-review as a plugin for Claude Code and Codex CLI.",
+  "owner": {
+    "name": "Dan MacTough",
+    "url": "https://github.com/danmactough"
+  },
+  "interface": {
+    "displayName": "Doc Review"
+  },
+  "plugins": [
+    {
+      "name": "doc-review",
+      "description": "Native Markdown document review window for AI coding agents. Adds the /doc-review slash command in Claude Code, a doc-review skill in Codex CLI, and a pi extension exposing the same /doc-review command.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "category": "Engineering",
+      "homepage": "https://github.com/danmactough/doc-review",
+      "keywords": [
+        "markdown",
+        "review",
+        "document-review",
+        "glimpse",
+        "pi",
+        "doc-review"
+      ],
+      "source": "./plugin",
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      }
+    }
+  ]
+}

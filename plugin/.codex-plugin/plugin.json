@@ -1,0 +1,37 @@
+{
+  "name": "doc-review",
+  "version": "0.1.0",
+  "description": "Native Markdown document review window for AI coding agents. Review rendered Markdown, leave selection comments, edit the raw document, and feed the resulting feedback back to the agent.",
+  "author": {
+    "name": "Dan MacTough",
+    "url": "https://github.com/danmactough"
+  },
+  "homepage": "https://github.com/danmactough/doc-review",
+  "repository": "https://github.com/danmactough/doc-review",
+  "license": "MIT",
+  "keywords": [
+    "markdown",
+    "review",
+    "document-review",
+    "glimpse",
+    "doc-review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Doc Review",
+    "shortDescription": "Native Markdown review window with selection comments",
+    "longDescription": "Adds a doc-review skill that opens a native review window for Markdown documents. The user can comment on selections in the rendered document, leave document-level notes, edit the raw Markdown, and submit feedback that the agent then applies.",
+    "developerName": "Dan MacTough",
+    "category": "Engineering",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/danmactough/doc-review",
+    "defaultPrompt": [
+      "Review this plan",
+      "@doc-review docs/plan.md"
+    ]
+  }
+}
