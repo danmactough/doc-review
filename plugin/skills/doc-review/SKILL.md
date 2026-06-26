@@ -19,12 +19,21 @@ If you did not just create a Markdown document and no path was given, show an er
 The plugin ships a self-contained dispatcher script. Invoke it via your shell tool with this exact command (substituting the document path for `<path>` or passing nothing if the user wants you to pass the document you just created):
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" doc-review <path>
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
+	bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" <path>
+elif [ -n "${CODEX_PLUGIN_ROOT:-}" ] && [ -x "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
+	bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" <path>
+elif command -v doc-review >/dev/null 2>&1; then
+	doc-review <path>
+else
+	echo "doc-review is not available. Install the plugin via your agent's plugin/marketplace command, or run: npm install -g doc-review" >&2
+	exit 1
+fi
 ```
 
-`${CLAUDE_PLUGIN_ROOT}` is set by both Claude Code and Codex CLI when running plugin commands. On first invocation the dispatcher does a one-time `npm install` inside the plugin checkout to pull `glimpseui` and build its native helper, then exec's the CLI.
+Agent plugin hosts expose the plugin checkout through an environment variable such as `${CLAUDE_PLUGIN_ROOT}` or `${CODEX_PLUGIN_ROOT}`. The shell block above checks both names, then falls back to a globally installed `doc-review` binary. On first invocation the dispatcher does a one-time `npm install` inside the plugin checkout to pull `glimpseui` and build its native helper, then exec's the CLI.
 
-If the user did not provide a path and you just created a Markdown document, pass its absolute path as `<path>`. If you did not just create a document and no path was given, do not run the command — instead show the error above.
+If the user did not provide a path and you just created a Markdown document, pass its absolute path as `<path>`. If you did not just create a document and no path was given, do not run the command — instead show an error: `doc-review requires a Markdown file path.`
 
 A native window will open. **The shell call will block until the user clicks Submit feedback or closes the window — this can take minutes. Do not run other tool calls in parallel; just wait.**
 
