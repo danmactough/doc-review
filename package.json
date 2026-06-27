@@ -1,6 +1,6 @@
 {
   "name": "doc-review",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Root manifest for pi (pi install git:github.com/danmactough/doc-review). Points pi at the extension that lives under ./plugin/. Claude Code and Codex CLI ignore this file and read ./plugin/package.json instead.",
   "private": true,
   "type": "module",
