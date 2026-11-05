@@ -26,18 +26,13 @@
     "bin",
     "src",
     "web",
-    "commands",
     "skills",
     "extensions",
-    "scripts",
     ".claude-plugin",
     ".codex-plugin"
   ],
   "engines": {
     "node": ">=22"
-  },
-  "scripts": {
-    "install-command": "node scripts/install-command.js"
   },
   "dependencies": {
     "glimpseui": "^0.8.1"

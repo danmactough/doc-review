@@ -30,8 +30,7 @@
     ],
     "websiteURL": "https://github.com/danmactough/doc-review",
     "defaultPrompt": [
-      "Review this plan",
-      "@doc-review docs/plan.md"
+      "$doc-review docs/plan.md"
     ]
   }
 }

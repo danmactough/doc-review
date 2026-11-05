@@ -89,7 +89,7 @@ if [[ -n "$HOST_BIN" && -d "$GLIMPSEUI_DIR" && ! -x "$HOST_BIN" ]]; then
     fi
     echo "doc-review: after fixing the build prerequisites, you can retry by running:" >&2
     echo "  (cd '$GLIMPSEUI_DIR' && npm run $BUILD_TARGET)" >&2
-    echo "  …or just re-run /doc-review and this script will retry the build." >&2
+    echo "  …or just re-run the review and this script will retry the build." >&2
     exit 1
   fi
 fi

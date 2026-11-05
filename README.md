@@ -2,8 +2,8 @@
 
 A native Markdown document review window for terminal coding agents, powered by [Glimpse](https://github.com/hazat/glimpse). Ships for **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)**, **[Codex CLI](https://github.com/openai/codex)**, and **[pi](https://pi.dev)**.
 
-- In **Claude Code** it adds a `/doc-review` slash command.
-- In **Codex CLI** it ships as a `doc-review` skill.
+- In **Claude Code** it ships as a `doc-review` skill, invoked with `/doc-review:doc-review`.
+- In **Codex CLI** it ships as the same skill, invoked with `$doc-review`.
 - In **pi** it registers a `/doc-review` slash command.
 
 All three open the same native review window, render a Markdown file, let the user leave selection and document comments, allow direct raw Markdown edits, and write feedback back to the agent.
@@ -31,6 +31,16 @@ Then in pi:
 /plugin install doc-review@doc-review
 ```
 
+Then invoke:
+
+```text
+/doc-review:doc-review [path/to/file.md]
+```
+
+The review window only opens when you invoke it; Claude never opens it on its own.
+
+If you previously ran `npm run install-command`, delete the old copy of the command so it can't take the place of the skill: `rm ~/.claude/commands/doc-review.md`.
+
 ### Codex CLI
 
 ```bash
@@ -40,8 +50,10 @@ codex plugin marketplace add danmactough/doc-review
 Then enable the plugin in Codex and invoke:
 
 ```text
-@doc-review [path/to/file.md]
+$doc-review [path/to/file.md]
 ```
+
+The review window only opens when you invoke it; Codex never opens it on its own.
 
 ### Standalone CLI
 
@@ -50,7 +62,6 @@ git clone https://github.com/danmactough/doc-review.git
 cd doc-review/plugin
 npm install
 npm install -g .
-npm run install-command
 ```
 
 Then:

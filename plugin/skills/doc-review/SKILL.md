@@ -1,39 +1,34 @@
 ---
 name: doc-review
-description: Open the native, rendered Markdown document review window (Monaco + Glimpse) so the user can review a Markdown document the agent just created, leave selection or overall comments, edit the raw Markdown, and submit feedback for the agent to incorporate.
+description: Open the native Markdown document review window so the user can leave comments on the rendered document and edit the raw Markdown, then address the resulting feedback.
+argument-hint: "[path]"
+disable-model-invocation: true
 ---
 
 # doc-review
 
 Open the native document review window, wait for the user to submit feedback or close it, then address each item.
 
-## When to use
-
-- User asks to "review the document", "review the plan", "review the PRD", "review the spec", or "review the markdown" they just had you generate
-- User explicitly invokes `@doc-review`
-
-If you did not just create a Markdown document and no path was given, show an error: `doc-review requires a Markdown file path.`
-
 ## Step 1 — invoke the dispatcher via the shell tool
 
-The plugin ships a self-contained dispatcher script. Invoke it via your shell tool with this exact command (substituting the document path for `<path>` or passing nothing if the user wants you to pass the document you just created):
+The plugin ships a self-contained dispatcher script. Invoke it via your shell tool with this exact command:
 
 ```bash
 if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
-	bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" <path>
+  bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" $ARGUMENTS
 elif [ -n "${CODEX_PLUGIN_ROOT:-}" ] && [ -x "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
-	bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" <path>
+  bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" $ARGUMENTS
 elif command -v doc-review >/dev/null 2>&1; then
-	doc-review <path>
+  doc-review $ARGUMENTS
 else
-	echo "doc-review is not available. Install the plugin via your agent's plugin/marketplace command, or run: npm install -g doc-review" >&2
-	exit 1
+  echo "doc-review is not available. Install the plugin via your agent's plugin/marketplace command, or run: npm install -g pi-doc-review" >&2
+  exit 1
 fi
 ```
 
-Agent plugin hosts expose the plugin checkout through an environment variable such as `${CLAUDE_PLUGIN_ROOT}` or `${CODEX_PLUGIN_ROOT}`. The shell block above checks both names, then falls back to a globally installed `doc-review` binary. On first invocation the dispatcher does a one-time `npm install` inside the plugin checkout to pull `glimpseui` and build its native helper, then exec's the CLI.
+Some hosts fill in the arguments before you see this block, and others don't. If the block still contains an unfilled arguments placeholder, replace it with the path the user typed after the skill name. Never run the block with the placeholder unfilled, because the shell would expand it to nothing and the dispatcher would receive no path.
 
-If the user did not provide a path and you just created a Markdown document, pass its absolute path as `<path>`. If you did not just create a document and no path was given, do not run the command — instead show an error: `doc-review requires a Markdown file path.`
+If the user did not provide a path and you just created a Markdown document, pass its absolute path as the argument. If you did not just create a document and no path was given, do not run the command — instead show an error: `doc-review requires a Markdown file path.`
 
 A native window will open. **The shell call will block until the user clicks Submit feedback or closes the window — this can take minutes. Do not run other tool calls in parallel; just wait.**
 
