@@ -19,7 +19,7 @@ If you did not just create a Markdown document and no path was given, show an er
 The plugin ships a self-contained dispatcher script. Invoke it via your shell tool with this exact command (substituting the document path for `<path>` or passing nothing if the user wants you to pass the document you just created):
 
 ```bash
-if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
+if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
 	bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" <path>
 elif [ -n "${CODEX_PLUGIN_ROOT:-}" ] && [ -x "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
 	bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" <path>

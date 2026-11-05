@@ -14,10 +14,10 @@ Invoke this exact shell command using your shell/bash tool. The window will bloc
 If the user gave a path, pass it as-is:
 
 ```bash
-if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
-  bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" doc-review $ARGUMENTS
+if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -x "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
+  bash "${CLAUDE_PLUGIN_ROOT}/bin/plugin-run.sh" $ARGUMENTS
 elif [ -n "${CODEX_PLUGIN_ROOT:-}" ] && [ -x "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" ]; then
-  bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" doc-review $ARGUMENTS
+  bash "${CODEX_PLUGIN_ROOT}/bin/plugin-run.sh" $ARGUMENTS
 elif command -v doc-review >/dev/null 2>&1; then
   doc-review $ARGUMENTS
 else
