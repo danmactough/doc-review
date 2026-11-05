@@ -36,7 +36,7 @@ if [[ "$needs_install" == "1" ]]; then
     exit 1
   fi
   echo "doc-review: installing plugin dependencies (first run)..." >&2
-  (cd "$ROOT" && npm install --omit=dev --no-audit --no-fund) >&2
+  (cd "$ROOT" && npm install --omit=dev --no-audit --no-fund --workspaces=false --no-package-lock) >&2
   touch "$STAMP"
 fi
 
