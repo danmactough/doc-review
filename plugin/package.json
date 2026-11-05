@@ -1,6 +1,6 @@
 {
   "name": "pi-doc-review",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Native Markdown document review window for AI coding agents (pi, Claude Code, Codex CLI). Opens a Glimpse window that renders Markdown, lets the user leave selection and document comments, edit the raw Markdown, and returns feedback to the agent.",
   "license": "MIT",
   "author": "Dan MacTough <danmactough@users.noreply.github.com>",

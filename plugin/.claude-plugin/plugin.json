@@ -1,6 +1,6 @@
 {
   "name": "doc-review",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Native Markdown document review window for AI coding agents. Review rendered Markdown, leave selection comments, edit the raw document, and feed the resulting feedback back to the agent.",
   "author": {
     "name": "Dan MacTough",
