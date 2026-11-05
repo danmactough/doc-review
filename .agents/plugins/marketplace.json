@@ -7,7 +7,7 @@
     {
       "name": "doc-review",
       "description": "Native Markdown document review window for AI coding agents. Adds a `doc-review` skill for Codex CLI (`$doc-review`) and Claude Code (`/doc-review:doc-review`), and a pi extension exposing a `/doc-review` command.",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "license": "MIT",
       "category": "Engineering",
       "homepage": "https://github.com/danmactough/doc-review",
